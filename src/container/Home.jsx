@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Box, Button, FormLabel, Input, InputGroup, InputRightElement, Switch, Text, useColorMode } from '@chakra-ui/react';
+import { Box, Button, FormLabel, Input, InputGroup, InputRightElement, Switch, Text, useColorMode, useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
@@ -16,11 +16,24 @@ const Home = () => {
     const [ value, setValue ] = useState('');
 
     const { colorMode, toggleColorMode } = useColorMode();
+    const toast = useToast();
 
     const navigate = useNavigate();
 
     const handleSubmit = event => {
         event.preventDefault();
+
+        if ( value.trim() === '' ) {
+            return toast({
+                title: 'Error',
+                description: 'Debes ingresar una palabra clave',
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom-right',
+            });
+        }
+
         setSearch( value );
         navigate( '/search' );
     }
